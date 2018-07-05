@@ -3,6 +3,7 @@ package mouse;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import model.Pair;
+import model.Shape;
 
 //import jdk.internal.util.xml.impl.Pair;
 
@@ -20,7 +21,8 @@ public class MouseHandler extends MouseAdapter{
 	public void mouseReleased(MouseEvent e) {		
 		end = new Pair(e.getX(), e.getY());
 		System.out.println("End: ");
-		System.out.println("X: " + end.getX() + " Y: " + end.getY());		
+		System.out.println("X: " + end.getX() + " Y: " + end.getY());	
+		new Shape(start, end);
 	}
 	
 	public Pair getStart() {
