@@ -29,6 +29,7 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         JPanel window = createWindow();
         this.canvas = canvas;
         window.add(canvas, BorderLayout.CENTER);
+        window.addMouseListener();
 		validate();
     }
 
