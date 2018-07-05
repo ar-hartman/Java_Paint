@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import mouse.MouseHandler;
 import view.interfaces.IGuiWindow;
 import view.EventName;
 
@@ -30,12 +29,7 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         JPanel window = createWindow();
         this.canvas = canvas;
         window.add(canvas, BorderLayout.CENTER);
-<<<<<<< HEAD
-        window.addMouseListener(new MouseHandler());
-        addMouseListener(new MouseHandler());
-=======
         window.addMouseListener();
->>>>>>> branch 'dev-7-5-18' of file:///C:\Users\adhartma\Documents\GitHub\Java_Paint
 		validate();
     }
 
