@@ -1,5 +1,9 @@
 package model.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.BuilderObserver;
 import model.ShapeColor;
 import model.ShapeShadingType;
 import model.ShapeType;
@@ -15,6 +19,14 @@ public class DialogProvider implements IDialogProvider {
     private final IDialogChoice<ShapeShadingType> chooseShadingTypeDialog;
     private final IDialogChoice<StartAndEndPointMode> chooseStartAndEndPointModeDialog;
     private final IApplicationState applicationState;
+    
+    /*
+     * 
+     * user provided instance variables/objects
+     * 
+     */
+    private List<BuilderObserver> observers = new ArrayList<BuilderObserver>();
+    
 
     public DialogProvider(IApplicationState applicationState) {
         this.applicationState = applicationState;
@@ -48,5 +60,18 @@ public class DialogProvider implements IDialogProvider {
     @Override
     public IDialogChoice<StartAndEndPointMode> getChooseStartAndEndPointModeDialog() {
         return chooseStartAndEndPointModeDialog;
+    }
+    
+    /*
+     * User provided methods
+     */
+    public void attach(BuilderObserver observer) {
+    	observers.add(observer);
+    }
+    
+    public void notifyAllObservers() {
+    	for (BuilderObserver observer : observers) {
+    		observer.update();
+    	}
     }
 }
