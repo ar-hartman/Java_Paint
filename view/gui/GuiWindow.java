@@ -7,21 +7,30 @@ import java.util.NoSuchElementException;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import collection.ShapeList;
+import model.ShapeBuilder;
+import model.persistence.ApplicationState;
+import mouse.MouseHandler;
 import view.interfaces.IGuiWindow;
 import view.EventName;
 
 import java.awt.*;
 
 public class GuiWindow extends JFrame implements IGuiWindow {
-    private final int defaultWidth = 1200;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final int defaultWidth = 1200;
     private final int defaultHeight = 800;
     private final String defaultTitle = "JPaint";
     private final Insets defaultButtonDimensions 
     	= new Insets(5, 8, 5, 8);
     private final Map<EventName, JButton> eventButtons = new HashMap<>();
-    private final PaintCanvas canvas;
+	private final PaintCanvas canvas;
 
-    public GuiWindow(PaintCanvas canvas){
+
+    public GuiWindow(PaintCanvas canvas, MouseHandler mouseHandler){
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle(defaultTitle);
@@ -29,11 +38,12 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         JPanel window = createWindow();
         this.canvas = canvas;
         window.add(canvas, BorderLayout.CENTER);
-        window.addMouseListener();
+        window.addMouseListener(mouseHandler);    
 		validate();
     }
 
-    @Override
+
+	@Override
 	public JButton getButton(EventName eventName) {
 		if(!eventButtons.containsKey(eventName))
 			throw new NoSuchElementException("No button exists for action " + eventName.toString());
