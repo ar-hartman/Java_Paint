@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import collection.ShapeList;
+import command.Command;
+import command.CommandList;
+import command.DrawShape;
 import model.persistence.ApplicationState;
 import mouse.MouseHandler;
+import view.gui.PaintCanvas;
 
 public class ShapeBuilder extends BuilderObserver{
 	private Pair start;
@@ -18,11 +22,14 @@ public class ShapeBuilder extends BuilderObserver{
     private ShapeList shapes = new ShapeList();
     public Shape newShape;
     private List<ShapeObserver> shapeObservers = new ArrayList<ShapeObserver>();
+    private CommandList commandList = new CommandList();
+    private PaintCanvas canvas;
     
-    public ShapeBuilder(MouseHandler mouseHandler, ApplicationState appState) {
+    public ShapeBuilder(MouseHandler mouseHandler, ApplicationState appState, PaintCanvas canvas) {
     	this.mouseHandler = mouseHandler;
     	this.mouseHandler.attach(this);
     	this.appState = appState;
+    	this.canvas = canvas;
     }
     
     public ShapeBuilder setStart(Pair start) {
@@ -50,8 +57,11 @@ public class ShapeBuilder extends BuilderObserver{
     	return this;
     }
     public Shape toShape() {
-    	newShape = new Shape(start, end, shapeType, primaryColor, secondaryColor, shadingType);
-    	notifyAllObservers();
+    	newShape = new Shape(start, end, shapeType, primaryColor, secondaryColor, shadingType, canvas);
+    	DrawShape drawShapeCommand = new DrawShape(newShape);
+    	commandList.takeCommand(drawShapeCommand);
+    	commandList.doCommand();
+    	//notifyAllObservers();
     	return newShape;
     }
     
@@ -61,6 +71,7 @@ public class ShapeBuilder extends BuilderObserver{
      * Methods necessary for ShapeList observer implementation
      * 
      */
+    /*
 	public void attach(ShapeObserver shapeObserver) {
 		shapeObservers.add(shapeObserver);
 	}
@@ -69,6 +80,7 @@ public class ShapeBuilder extends BuilderObserver{
 			shapeObserver.update();
 		}
 	}
+	*/
 	
 	public Shape getShape() {
 		return newShape;
