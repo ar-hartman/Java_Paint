@@ -8,8 +8,6 @@ public class DrawShape implements Command{
 	public DrawShape(Shape shape) {
 		this.shape = shape;
 	}
-
-
 	@Override
 	public void execute() {
 		shape.draw();		
