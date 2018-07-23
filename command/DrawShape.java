@@ -12,4 +12,6 @@ public class DrawShape implements Command{
 	public void execute() {
 		shape.draw();		
 	}
+
+
 }

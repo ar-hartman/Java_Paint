@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import collection.ShapeList;
-import command.Command;
 import command.CommandList;
 import command.DrawShape;
 import model.persistence.ApplicationState;
