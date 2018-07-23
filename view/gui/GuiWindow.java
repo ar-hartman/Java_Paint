@@ -40,6 +40,8 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         window.add(canvas, BorderLayout.CENTER);
         window.addMouseListener(mouseHandler);    
 		validate();
+		
+	
     }
 
 
