@@ -12,12 +12,12 @@ public class ShapeList {
 		shapeList.add(shape);
 		System.out.println("something added - triggered by addShape methof from ShapeList class");
 	}
-	/*
+	
 	public void drawShapes() {
 		for (Shape shape : shapeList) {
-			command.execute();
+			shape.draw();
 		}
-	}*/
+	}
 	public ArrayList<Shape> getShapeList(){
 		return shapeList;
 	}

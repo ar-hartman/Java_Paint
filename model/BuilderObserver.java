@@ -5,4 +5,5 @@ import mouse.MouseHandler;
 public abstract class BuilderObserver {
 	protected MouseHandler mouseHandler;
 	public abstract Shape update();
+	//public abstract void update();
 }

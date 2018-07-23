@@ -1,5 +1,9 @@
 package main;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import collection.ShapeList;
 import command.CommandList;
 import controller.IJPaintController;
@@ -28,8 +32,13 @@ public class Main {
         /*
          * 
          */
+    	PaintCanvas canvas = new PaintCanvas();
     	MouseHandler mouseHandler = new MouseHandler();
-    	IGuiWindow guiWindow = new GuiWindow(new PaintCanvas(), mouseHandler);
+    	
+    	
+    	
+    	
+    	IGuiWindow guiWindow = new GuiWindow(canvas, mouseHandler);
         IUiModule uiModule = new Gui(guiWindow);
         ApplicationState appState = new ApplicationState(uiModule);
         
@@ -47,7 +56,18 @@ public class Main {
          * 
          */
         
-        ShapeBuilder builder = new ShapeBuilder(mouseHandler, appState);
-        ShapeListObserver shapeListObserver = new ShapeListObserver(builder);       
+        ShapeBuilder builder = new ShapeBuilder(mouseHandler, appState, canvas);
+        
+        /*
+         * 
+         * This next call can probably be deleted
+         * 
+        ShapeListObserver shapeListObserver = new ShapeListObserver(builder); 
+        */
+        //ShapeList shapeList = shapeListObserver.getShapeList();
+        //DrawObserver drawObserver = new DrawObserver(shapeListObserver);
+        
+
+
     }
 }
