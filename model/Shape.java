@@ -55,25 +55,25 @@ public class Shape{
 				System.out.println("We've selected an ELIPSE");
 				
 		        graphics2d.setColor(primaryC);
-		        graphics2d.fillOval(start.getX(), start.getY(), Math.abs((end.getX()-start.getX()-1)), Math.abs(end.getY()-start.getY()-1));
+		        graphics2d.fillOval(start.getX(), start.getY()-39, ((end.getX()-start.getX())-1), (end.getY()-start.getY()-1));
 		        graphics2d.setStroke(new BasicStroke(5));
 		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawOval(start.getX(), start.getY(), Math.abs(end.getX()-start.getX()-1), Math.abs(end.getY()-start.getY()-1));	
+		        graphics2d.drawOval(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
 				break;
 			case "RECTANGLE":
 				System.out.println("We've selected an RECTANGLE");
 		        
 		        graphics2d.setColor(primaryC);
-		        graphics2d.fillRect(start.getX(), start.getY(), Math.abs((end.getX()-start.getX()-1)), Math.abs(end.getY()-start.getY()-1));
+		        graphics2d.fillRect(start.getX(), start.getY()-39, ((end.getX()-start.getX()-1)), (end.getY()-start.getY()-1));
 		        graphics2d.setStroke(new BasicStroke(5));
 		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawRect(start.getX(), start.getY(), Math.abs(end.getX()-start.getX()-1), Math.abs(end.getY()-start.getY()-1));	
+		        graphics2d.drawRect(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
 				break;
 			case "TRIANGLE":
 				System.out.println("We've selected an TRIANGLE");
 
-				int[] xArray = {start.getX(), start.getX(), start.getY()};
-				int[] yArray = {start.getY(), end.getY(), end.getY()};
+				int[] xArray = {start.getX(), start.getX(), end.getX()};
+				int[] yArray = {start.getY()-39, end.getY()-39, end.getY()-39};
 		        graphics2d.setColor(primaryC);
 		        graphics2d.fillPolygon(xArray, yArray, 3);
 		        graphics2d.setStroke(new BasicStroke(5));
@@ -82,4 +82,64 @@ public class Shape{
 				break;
 		}
 	}
+
+
+	public void delete() {
+		// TODO Auto-generated method stub
+		Graphics2D graphics2d = canvas.getGraphics2D();
+        /*
+         * I would like to use an adapter pattern to convert the colors we're building with from ShapeColor to Color using a design pattern.
+         */
+        
+        Color primaryC;
+        Color secondaryC;
+        try {
+        	Field field = Class.forName("java.awt.Color").getField("white");
+        	primaryC = (Color)field.get(null);
+        	field = Class.forName("java.awt.Color").getField("white");
+        	secondaryC = (Color)field.get(null);
+        }
+        catch (Exception e) {
+        	primaryC = null;
+        	secondaryC = null;
+        }
+        
+        
+        /*
+         * This next section looks prime for a strategy pattern application.
+         */
+		switch (shapeType.toString()) {
+			case "ELLIPSE":
+				System.out.println("We've selected an ELIPSE");
+				
+		        graphics2d.setColor(primaryC);
+		        graphics2d.fillOval(start.getX(), start.getY()-39, ((end.getX()-start.getX())-1), (end.getY()-start.getY()-1));
+		        graphics2d.setStroke(new BasicStroke(5));
+		        graphics2d.setColor(secondaryC);
+		        graphics2d.drawOval(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
+				break;
+			case "RECTANGLE":
+				System.out.println("We've selected an RECTANGLE");
+		        
+		        graphics2d.setColor(primaryC);
+		        graphics2d.fillRect(start.getX(), start.getY()-39, ((end.getX()-start.getX()-1)), (end.getY()-start.getY()-1));
+		        graphics2d.setStroke(new BasicStroke(5));
+		        graphics2d.setColor(secondaryC);
+		        graphics2d.drawRect(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
+				break;
+			case "TRIANGLE":
+				System.out.println("We've selected an TRIANGLE");
+
+				int[] xArray = {start.getX(), start.getX(), end.getX()};
+				int[] yArray = {start.getY()-39, end.getY()-39, end.getY()-39};
+		        graphics2d.setColor(primaryC);
+		        graphics2d.fillPolygon(xArray, yArray, 3);
+		        graphics2d.setStroke(new BasicStroke(5));
+				graphics2d.setColor(secondaryC);
+				graphics2d.drawPolygon(xArray, yArray, 3);
+				break;
+		}
+	}
+
+
 }

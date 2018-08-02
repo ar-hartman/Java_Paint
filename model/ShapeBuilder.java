@@ -1,11 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import collection.ShapeList;
-import command.CommandList;
-import command.DrawShape;
+//import command.CommandList;
+import command.DrawCommand;
 import model.persistence.ApplicationState;
 import mouse.MouseHandler;
 import view.gui.PaintCanvas;
@@ -18,10 +14,8 @@ public class ShapeBuilder extends BuilderObserver{
     private ShapeColor secondaryColor;
     private ShapeShadingType shadingType;
     private ApplicationState appState;
-    private ShapeList shapes = new ShapeList();
     public Shape newShape;
-    private List<ShapeObserver> shapeObservers = new ArrayList<ShapeObserver>();
-    private CommandList commandList = new CommandList();
+    //	private CommandList commandList = new CommandList();
     private PaintCanvas canvas;
     
     public ShapeBuilder(MouseHandler mouseHandler, ApplicationState appState, PaintCanvas canvas) {
@@ -57,9 +51,13 @@ public class ShapeBuilder extends BuilderObserver{
     }
     public Shape toShape() {
     	newShape = new Shape(start, end, shapeType, primaryColor, secondaryColor, shadingType, canvas);
-    	DrawShape drawShapeCommand = new DrawShape(newShape);
-    	commandList.takeCommand(drawShapeCommand);
-    	commandList.doCommand();
+    	DrawCommand drawShapeCommand = new DrawCommand(newShape);
+    	//commandList.takeCommand(drawShapeCommand);
+    	drawShapeCommand.execute();
+    	
+    	//commandList.doCommand();
+    	
+    	
     	//notifyAllObservers();
     	return newShape;
     }

@@ -1,6 +1,6 @@
 package model;
-
-public abstract class ShapeObserver {
+/*
+public interface ShapeObserver {
 	/*
 	 * 
 	 * 
@@ -10,6 +10,9 @@ public abstract class ShapeObserver {
 	 * 
 	 * 
 	 */
-	protected ShapeBuilder shapeBuilder;
-	public abstract void update();
+	//protected ShapeBuilder shapeBuilder;
+
+/*
+public abstract void update();
 }
+*/
