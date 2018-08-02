@@ -8,6 +8,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import collection.ShapeList;
+import command.ICommand;
+import command.RedoCommand;
+import command.UndoCommand;
 import model.ShapeBuilder;
 import model.persistence.ApplicationState;
 import mouse.MouseHandler;
@@ -15,8 +18,10 @@ import view.interfaces.IGuiWindow;
 import view.EventName;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class GuiWindow extends JFrame implements IGuiWindow {
+public class GuiWindow extends JFrame implements IGuiWindow, ActionListener {
     /**
 	 * 
 	 */
@@ -81,6 +86,7 @@ public class GuiWindow extends JFrame implements IGuiWindow {
 		newButton.setForeground(Color.BLACK);
 		newButton.setBackground(Color.WHITE);
         newButton.setBorder(createButtonBorder());
+        newButton.addActionListener(this);
 		return newButton;
 	}
 
@@ -106,4 +112,26 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         setContentPane(contentPane);
         return contentPane;
     }
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("e: " + e.getActionCommand().toString());
+		ICommand command;
+		String action = e.getActionCommand().toString();
+		switch(action) {
+		case "UNDO":
+			command = new UndoCommand();
+			break;	
+		case "REDO":
+			command = new RedoCommand();
+			break;
+		default:
+				throw new Error();
+		}
+		command.execute();
+	}
+
+
+
 }
