@@ -1,18 +1,26 @@
-package command;
+/*package command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class CommandList {
-	private List<Command> commandList = new ArrayList<Command>();
+	private List<ICommand> commandList = new ArrayList<ICommand>();
+
 	
-	public void takeCommand(Command command) {
+	public void takeCommand(ICommand command) {
 		commandList.add(command);
 	}
+	
+	
 	public void doCommand() {
-		for (Command command: commandList) {
+		for (ICommand command: commandList) {
+			System.out.println("Doing command from CommandList");
 			command.execute();
 		}
 	}
+	
+
 }
 
+*/
