@@ -12,17 +12,17 @@ public class DrawCommand implements ICommand, IUndoable{
 	public void execute() {
 		CommandHistory.add(this);
 		shape.draw();		
-		
 	}
+	
 	@Override
 	public void undo() {
-		shape.delete();
+		shape.undraw();
 	}
 	@Override
 	public void redo() {
 		shape.draw();
 	}
-
-
-
+	public Shape getShape() {
+		return shape;
+	}
 }

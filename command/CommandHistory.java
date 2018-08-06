@@ -30,4 +30,8 @@ public class CommandHistory {
 		}
 		return result;
 	}
+	
+	public static Stack<IUndoable> getUndoStack(){
+		return undoStack;
+	}
 }
