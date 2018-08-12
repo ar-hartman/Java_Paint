@@ -5,6 +5,12 @@ import model.ShapeShadingType;
 import model.ShapeType;
 import model.StartAndEndPointMode;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public interface IApplicationState {
     void setActiveShape();
 

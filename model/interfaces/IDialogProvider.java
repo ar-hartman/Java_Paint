@@ -6,6 +6,12 @@ import model.ShapeType;
 import model.StartAndEndPointMode;
 import view.interfaces.IDialogChoice;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public interface IDialogProvider {
 
     IDialogChoice<ShapeType> getChooseShapeDialog();
