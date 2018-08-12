@@ -1,5 +1,11 @@
 package view;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public enum EventName {
 	CHOOSE_SHAPE{
 		@Override
