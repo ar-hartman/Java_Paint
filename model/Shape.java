@@ -1,11 +1,48 @@
 package model;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.lang.reflect.Field;
-
 import view.gui.PaintCanvas;
+
+/*
+ * Description:
+ * The Shape class is responsible for the creation of all Shape objects within this program.  It is instantiated by
+ * the ShapeBuilder class via the BuilderObserver class.  This class utilizes a Strategy Pattern to create the specific
+ * Shape type (Ellipse, Rectangle, or Triangle) and utilizes an Adapter pattern to convert our ENUM provided Color string to 
+ * a java.awt.Color Color object. This class also contains methods to both Draw and Undraw itself, handled by the concrete
+ * Shape types. There are a series of trivial getter methods. Lastly, I have overridden the Equals method to allow for 
+ * Shape-to-Shape comparisons, namely for the Mover class. 
+ * 
+ * Fields:
+ * - Pair start
+ * - Pair end
+ * - ShapeType shapeType
+ * - ShapeColor primaryColor
+ * - ShapeColor secondaryColor
+ * - ShapeShadingType shadingType
+ * - PaintCanvas canvas
+ * - IShapeStrategy shapeStrategy
+ * - Color primaryC
+ * - Color secondaryC
+ * - Graphics2D graphics2d
+ * - IColorRequestor colorRequestor
+ * 
+ * Methods:
+ * - setupColors
+ * - setupShape
+ * - draw
+ * - undraw
+ * - getStart
+ * - getEnd
+ * - getShapeType
+ * - getPrimaryColor
+ * - getSecondaryColor
+ * - getShadingType
+ * - getCanvas
+ * - getWidth
+ * - getHeight
+ * - equals
+ */
 
 public class Shape{
 	private final Pair start;
@@ -15,6 +52,12 @@ public class Shape{
     private final ShapeColor secondaryColor;
     private final ShapeShadingType shadingType;
     private final PaintCanvas canvas;
+    private IShapeStrategy shapeStrategy;
+    private Color primaryC;
+    private Color secondaryC;
+	Graphics2D graphics2d;
+	IColorRequestor colorRequestor = new ColorAdapter();
+    
 	
 	public Shape(Pair start, Pair end, ShapeType shapeType, ShapeColor primaryColor, ShapeColor secondaryColor, ShapeShadingType shadingType, PaintCanvas canvas) {
 		this.start = start;
@@ -24,122 +67,86 @@ public class Shape{
 		this.secondaryColor = secondaryColor;
 		this.shadingType = shadingType;
 		this.canvas = canvas;
+		graphics2d = canvas.getGraphics2D();
+		setupColors();
+		setupShape();
+	}
+	
+	public void setupColors() {
+        primaryC = colorRequestor.requestColor(primaryColor);
+        secondaryC = colorRequestor.requestColor(secondaryColor);
+	}
+	
+	public void setupShape() {
+		switch (shapeType.toString()) {
+		case "ELLIPSE":
+			shapeStrategy = new Ellipse(start, end, primaryC, secondaryC, shadingType, graphics2d);
+			break;
+		case "RECTANGLE":
+			shapeStrategy = new Rectangle(start, end, primaryC, secondaryC, shadingType, graphics2d);
+			break;
+		case "TRIANGLE":
+			shapeStrategy = new Triangle(start, end, primaryC, secondaryC, shadingType, graphics2d);				
+			break;
+		}
 	}
 
 	public void draw() {
-		System.out.println("Something to console - triggered by execute from Shape class");
-		Graphics2D graphics2d = canvas.getGraphics2D();
-        /*
-         * I would like to use an adapter pattern to convert the colors we're building with from ShapeColor to Color using a design pattern.
-         */
-        
-        Color primaryC;
-        Color secondaryC;
-        try {
-        	Field field = Class.forName("java.awt.Color").getField(primaryColor.toString());
-        	primaryC = (Color)field.get(null);
-        	field = Class.forName("java.awt.Color").getField(secondaryColor.toString());
-        	secondaryC = (Color)field.get(null);
-        }
-        catch (Exception e) {
-        	primaryC = null;
-        	secondaryC = null;
-        }
-        
-        
-        /*
-         * This next section looks prime for a strategy pattern application.
-         */
-		switch (shapeType.toString()) {
-			case "ELLIPSE":
-				System.out.println("We've selected an ELIPSE");
-				
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillOval(start.getX(), start.getY()-39, ((end.getX()-start.getX())-1), (end.getY()-start.getY()-1));
-		        graphics2d.setStroke(new BasicStroke(5));
-		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawOval(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
-				break;
-			case "RECTANGLE":
-				System.out.println("We've selected an RECTANGLE");
-		        
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillRect(start.getX(), start.getY()-39, ((end.getX()-start.getX()-1)), (end.getY()-start.getY()-1));
-		        graphics2d.setStroke(new BasicStroke(5));
-		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawRect(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
-				break;
-			case "TRIANGLE":
-				System.out.println("We've selected an TRIANGLE");
-
-				int[] xArray = {start.getX(), start.getX(), end.getX()};
-				int[] yArray = {start.getY()-39, end.getY()-39, end.getY()-39};
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillPolygon(xArray, yArray, 3);
-		        graphics2d.setStroke(new BasicStroke(5));
-				graphics2d.setColor(secondaryC);
-				graphics2d.drawPolygon(xArray, yArray, 3);
-				break;
-		}
+        shapeStrategy.draw();
 	}
 
-
-	public void delete() {
-		// TODO Auto-generated method stub
-		Graphics2D graphics2d = canvas.getGraphics2D();
-        /*
-         * I would like to use an adapter pattern to convert the colors we're building with from ShapeColor to Color using a design pattern.
-         */
-        
-        Color primaryC;
-        Color secondaryC;
-        try {
-        	Field field = Class.forName("java.awt.Color").getField("white");
-        	primaryC = (Color)field.get(null);
-        	field = Class.forName("java.awt.Color").getField("white");
-        	secondaryC = (Color)field.get(null);
-        }
-        catch (Exception e) {
-        	primaryC = null;
-        	secondaryC = null;
-        }
-        
-        
-        /*
-         * This next section looks prime for a strategy pattern application.
-         */
-		switch (shapeType.toString()) {
-			case "ELLIPSE":
-				System.out.println("We've selected an ELIPSE");
-				
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillOval(start.getX(), start.getY()-39, ((end.getX()-start.getX())-1), (end.getY()-start.getY()-1));
-		        graphics2d.setStroke(new BasicStroke(5));
-		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawOval(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
-				break;
-			case "RECTANGLE":
-				System.out.println("We've selected an RECTANGLE");
-		        
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillRect(start.getX(), start.getY()-39, ((end.getX()-start.getX()-1)), (end.getY()-start.getY()-1));
-		        graphics2d.setStroke(new BasicStroke(5));
-		        graphics2d.setColor(secondaryC);
-		        graphics2d.drawRect(start.getX(), start.getY()-39, (end.getX()-start.getX()-1), (end.getY()-start.getY()-1));	
-				break;
-			case "TRIANGLE":
-				System.out.println("We've selected an TRIANGLE");
-
-				int[] xArray = {start.getX(), start.getX(), end.getX()};
-				int[] yArray = {start.getY()-39, end.getY()-39, end.getY()-39};
-		        graphics2d.setColor(primaryC);
-		        graphics2d.fillPolygon(xArray, yArray, 3);
-		        graphics2d.setStroke(new BasicStroke(5));
-				graphics2d.setColor(secondaryC);
-				graphics2d.drawPolygon(xArray, yArray, 3);
-				break;
-		}
+	public void undraw() {
+        shapeStrategy.undraw();
 	}
-
-
+	
+	
+	/*
+	 * Getter methods
+	 */
+	public Pair getStart() {
+		return start;
+	}
+	public Pair getEnd() {
+		return end;
+	}
+	public ShapeType getShapeType() {
+		return shapeType;
+	}
+	public ShapeColor getPrimaryColor() {
+	    return primaryColor;
+	}
+	public ShapeColor getSecondaryColor() {
+		return secondaryColor;
+		
+	}
+	public ShapeShadingType getShadingType() {
+		return shadingType;
+	}
+	public PaintCanvas getCanvas() {
+		return canvas;
+	}
+	public int getWidth() {
+		return end.getX() - start.getX();
+	}
+	public int getHeight() {
+		return end.getY() - start.getY();
+	}
+	
+	/*
+	 * overridden equals function
+	 */
+	public boolean equals(Shape shape) {
+		if (this.getWidth() == shape.getWidth() &&
+			this.getHeight() == shape.getHeight() &&
+			this.shapeType.toString().equals(shape.shapeType.toString()) &&
+			this.primaryColor.toString().equals(shape.primaryColor.toString()) &&
+			this.secondaryColor.toString().equals(shape.secondaryColor.toString()) &&
+			this.shadingType.toString().equals(shape.shadingType.toString())) 
+		{
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
 }

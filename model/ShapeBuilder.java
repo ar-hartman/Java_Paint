@@ -1,10 +1,39 @@
 package model;
 
-//import command.CommandList;
 import command.DrawCommand;
 import model.persistence.ApplicationState;
 import mouse.MouseHandler;
 import view.gui.PaintCanvas;
+
+/*
+ * Description:
+ * This class is the ShapeBuilder class, utilizing the Builder design pattern, triggered by the 
+ * BuilderObserver pattern.  Attributes such as shapeType, primary and secondary colors, and shadingType
+ * are provided by the Application State settings; set with the series of setter methods. The Shape is 
+ * finished when start and end Pairs are provided by the MouseHandler via the BuilderObserver notification. 
+ * 
+ * Fields:
+ * - Pair start
+ * - Pair end
+ * - ShapeType shapeType
+ * - ShapeColor primaryColor
+ * - ShapeColor secondaryColor
+ * - ShapeShadingType shadingType
+ * - ApplicationState appState
+ * - Shape newShape
+ * - PaintCanvas canvas 
+ * 
+ * Methods:
+ * - setStart
+ * - setEnd
+ * - setShapeType
+ * - setPrimaryColor
+ * - setSecondaryColor
+ * - setShadingType
+ * - toShape
+ * - getShape
+ * - update 
+ */
 
 public class ShapeBuilder extends BuilderObserver{
 	private Pair start;
@@ -15,7 +44,6 @@ public class ShapeBuilder extends BuilderObserver{
     private ShapeShadingType shadingType;
     private ApplicationState appState;
     public Shape newShape;
-    //	private CommandList commandList = new CommandList();
     private PaintCanvas canvas;
     
     public ShapeBuilder(MouseHandler mouseHandler, ApplicationState appState, PaintCanvas canvas) {
@@ -52,46 +80,24 @@ public class ShapeBuilder extends BuilderObserver{
     public Shape toShape() {
     	newShape = new Shape(start, end, shapeType, primaryColor, secondaryColor, shadingType, canvas);
     	DrawCommand drawShapeCommand = new DrawCommand(newShape);
-    	//commandList.takeCommand(drawShapeCommand);
     	drawShapeCommand.execute();
-    	
-    	//commandList.doCommand();
-    	
-    	
-    	//notifyAllObservers();
     	return newShape;
     }
     
-    
-    /*
-     * 
-     * Methods necessary for ShapeList observer implementation
-     * 
-     */
-    /*
-	public void attach(ShapeObserver shapeObserver) {
-		shapeObservers.add(shapeObserver);
-	}
-	private void notifyAllObservers() {
-		for (ShapeObserver shapeObserver: shapeObservers) {
-			shapeObserver.update();
-		}
-	}
-	*/
-	
 	public Shape getShape() {
 		return newShape;
 	}
 
 	@Override
-	public Shape update() {
-		System.out.println("Application State Changed");
-		setStart(mouseHandler.getStart());
-		setEnd(mouseHandler.getEnd());
-		setShapeType(appState.getActiveShapeType());
-		setPrimaryColor(appState.getActivePrimaryColor());
-		setSecondaryColor(appState.getActiveSecondaryColor());
-		setShadingType(appState.getActiveShapeShadingType());
-		return this.toShape();
+	public void update() {
+		if(appState.getActiveStartAndEndPointMode().toString() == "DRAW") {
+			setStart(mouseHandler.getStart());
+			setEnd(mouseHandler.getEnd());
+			setShapeType(appState.getActiveShapeType());
+			setPrimaryColor(appState.getActivePrimaryColor());
+			setSecondaryColor(appState.getActiveSecondaryColor());
+			setShadingType(appState.getActiveShapeShadingType());
+			this.toShape();
+		}
 	}
 }
