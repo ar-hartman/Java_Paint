@@ -4,6 +4,12 @@ import model.interfaces.IApplicationState;
 import view.EventName;
 import view.interfaces.IUiModule;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public class JPaintController implements IJPaintController {
     private final IUiModule uiModule;
     private final IApplicationState applicationState;
