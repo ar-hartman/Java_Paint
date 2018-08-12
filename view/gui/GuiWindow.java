@@ -7,12 +7,15 @@ import java.util.NoSuchElementException;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import collection.ShapeList;
+import collection.ClipBoard;
+import command.CopyCommand;
+import command.DeleteCommand;
 import command.ICommand;
+import command.NullCommand;
+import command.PasteCommand;
 import command.RedoCommand;
 import command.UndoCommand;
-import model.ShapeBuilder;
-import model.persistence.ApplicationState;
+import model.Selector;
 import mouse.MouseHandler;
 import view.interfaces.IGuiWindow;
 import view.EventName;
@@ -21,16 +24,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/*
+ * Description of changes:
+ * - Added mouseListener to the GuiWindow instantiation
+ * - Added actionPerformed logic to trigger the following commands: UNDO, REDO, COPY, PASTE, and DELETE
+ * 
+ * Added Fields:
+ * - n/a
+ * 
+ * Added Methods:
+ * - actionPerformed
+ */
+
 public class GuiWindow extends JFrame implements IGuiWindow, ActionListener {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final int defaultWidth = 1200;
     private final int defaultHeight = 800;
     private final String defaultTitle = "JPaint";
-    private final Insets defaultButtonDimensions 
-    	= new Insets(5, 8, 5, 8);
+    private final Insets defaultButtonDimensions = new Insets(5, 8, 5, 8);
     private final Map<EventName, JButton> eventButtons = new HashMap<>();
 	private final PaintCanvas canvas;
 
@@ -45,8 +56,6 @@ public class GuiWindow extends JFrame implements IGuiWindow, ActionListener {
         window.add(canvas, BorderLayout.CENTER);
         window.addMouseListener(mouseHandler);    
 		validate();
-		
-	
     }
 
 
@@ -116,9 +125,9 @@ public class GuiWindow extends JFrame implements IGuiWindow, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("e: " + e.getActionCommand().toString());
 		ICommand command;
 		String action = e.getActionCommand().toString();
+		
 		switch(action) {
 		case "UNDO":
 			command = new UndoCommand();
@@ -126,8 +135,17 @@ public class GuiWindow extends JFrame implements IGuiWindow, ActionListener {
 		case "REDO":
 			command = new RedoCommand();
 			break;
+		case "DELETE":
+			command = new DeleteCommand(Selector.getShape());
+			break;
+		case "COPY":
+			command = new CopyCommand(Selector.getShape());
+			break;
+		case "PASTE":
+			command = new PasteCommand(ClipBoard.getShape());
+			break;
 		default:
-				throw new Error();
+			command = new NullCommand();
 		}
 		command.execute();
 	}

@@ -8,6 +8,12 @@ import view.interfaces.IEventCallback;
 import view.interfaces.IGuiWindow;
 import view.interfaces.IUiModule;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public class Gui implements IUiModule {
 
     private final IGuiWindow gui;
