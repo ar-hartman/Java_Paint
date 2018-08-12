@@ -4,6 +4,12 @@ import model.ShapeType;
 import model.interfaces.IApplicationState;
 import view.interfaces.IDialogChoice;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public class ChooseShapeDialog implements IDialogChoice<ShapeType> {
     private final IApplicationState applicationState;
 

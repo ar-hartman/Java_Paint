@@ -4,6 +4,12 @@ import model.ShapeShadingType;
 import model.interfaces.IApplicationState;
 import view.interfaces.IDialogChoice;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public class ChooseShadingTypeDialog implements IDialogChoice<ShapeShadingType> {
     private final IApplicationState applicationState;
 

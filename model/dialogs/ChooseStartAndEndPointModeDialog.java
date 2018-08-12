@@ -4,6 +4,12 @@ import model.StartAndEndPointMode;
 import model.interfaces.IApplicationState;
 import view.interfaces.IDialogChoice;
 
+/*
+ * Description: 
+ * No changes from Instructor provided code.
+ * 
+ */
+
 public class ChooseStartAndEndPointModeDialog implements IDialogChoice<StartAndEndPointMode> {
     private final IApplicationState applicationState;
 

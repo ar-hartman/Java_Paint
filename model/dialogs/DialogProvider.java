@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.BuilderObserver;
+import model.Observer;
 import model.ShapeColor;
 import model.ShapeShadingType;
 import model.ShapeType;
@@ -11,6 +12,19 @@ import model.StartAndEndPointMode;
 import model.interfaces.IApplicationState;
 import model.interfaces.IDialogProvider;
 import view.interfaces.IDialogChoice;
+
+/*
+ * Description: 
+ * This class was modified to allow for the Observer Pattern, providing notification to 
+ * the BuilderObserver, the application state attributes provided by the GuiWindow. 
+ * 
+ * Added Fields:
+ * - List<Observer> observers
+ * 
+ * Added Methods:
+ * - attach
+ * - notifyAllObservers
+ */
 
 public class DialogProvider implements IDialogProvider {
     private final IDialogChoice<ShapeType> chooseShapeDialog;
@@ -25,7 +39,7 @@ public class DialogProvider implements IDialogProvider {
      * user provided instance variables/objects
      * 
      */
-    private List<BuilderObserver> observers = new ArrayList<BuilderObserver>();
+    private List<Observer> observers = new ArrayList<Observer>();
     
 
     public DialogProvider(IApplicationState applicationState) {
@@ -65,12 +79,12 @@ public class DialogProvider implements IDialogProvider {
     /*
      * User provided methods
      */
-    public void attach(BuilderObserver observer) {
+    public void attach(Observer observer) {
     	observers.add(observer);
     }
     
     public void notifyAllObservers() {
-    	for (BuilderObserver observer : observers) {
+    	for (Observer observer : observers) {
     		observer.update();
     	}
     }
