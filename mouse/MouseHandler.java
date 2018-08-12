@@ -6,12 +6,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import collection.ShapeList;
-import model.BuilderObserver;
+import model.Observer;
 import model.Pair;
 import model.Shape;
 
-
-//import jdk.internal.util.xml.impl.Pair;
+/*
+ * Description:
+ * This MouseHandler class completes the MouseObserver Observer pattern, notifying all
+ * dependent classes when a mouse is left-clicked and released.  At this time, a notification
+ * is sent to all connected Observers.  When the observers require the updated information,
+ * the call he MouseHandler class' getter methods for the starting and ending Pairs, which were
+ * created at the mousePressed and mouseReleased instances, respectively.
+ * 
+ * Fields:
+ * - Pair start
+ * - Pair end
+ * - ShapeList shapes
+ * - Shape shape
+ * 
+ * Methods:
+ * - mousePressed
+ * - mouseReleased
+ * - getStart
+ * - getEnd
+ * - setPoints
+ * - update
+ * - attach
+ * - notifyAllObservers
+ */
 
 public class MouseHandler extends MouseAdapter implements MouseObserver{
 	private Pair start;
@@ -19,41 +41,15 @@ public class MouseHandler extends MouseAdapter implements MouseObserver{
 	ShapeList shapes = new ShapeList();;
 	Shape shape;
 
+    private List<Observer> observers = new ArrayList<Observer>();
 	
-    /*
-     * 
-     * user provided instance variables/objects
-     * 
-     */
-    private List<BuilderObserver> observers = new ArrayList<BuilderObserver>();
-	
-    
-    
-    
-    
-    
 	public void mousePressed(MouseEvent e) {
-		// something
 		start = new Pair(e.getX(), e.getY());	
-		System.out.println("Start: ");
-		System.out.println("X: " + start.getX() + " Y: " + start.getY());
 	}
 	
 	public void mouseReleased(MouseEvent e) {
 		end = new Pair(e.getX(), e.getY());
-		System.out.println("End: ");
-		System.out.println("X: " + end.getX() + " Y: " + end.getY());	
-		
-	//	builder.setStart(start);
-		//builder.setEnd(end);
-		//builder.setShapeType(appState.getActiveShapeType());
-		
-		//new Shape(start, end);
-		//System.out.println("Mouse Handler: Shape - " + applicationState.getActiveShapeType());
-		//shapes.addShape((Command) new Shape(start, end, applicationState.getActiveShapeType()));
-		//shapes.addShape((Command) new Shape(start, end));
-		//shapes.addShape(builder.toShape());
-		//shapes.drawShapes();
+		setPoints();
 		notifyAllObservers();
 	}
 	
@@ -63,25 +59,28 @@ public class MouseHandler extends MouseAdapter implements MouseObserver{
 	public Pair getEnd() {
 		return end;
 	}
+	public void setPoints() {
+		Pair smaller, larger;
+		
+		if (end.getX() < start.getX() || end.getY() < start.getY()) {
+			smaller = new Pair(Math.min(start.getX(), end.getX()), Math.min(start.getY(), end.getY()));
+			larger = new Pair(Math.max(start.getX(), end.getX()), Math.max(start.getY(), end.getY()));
+			start = smaller;
+			end = larger;
+		}		
+	}
 
 	@Override
 	public void update() {
-		System.out.println("Dialog Provider updated");
 	}
 
-	
-    /*
-     * User provided methods
-     */
-    public void attach(BuilderObserver observer) {
+    public void attach(Observer observer) {
     	observers.add(observer);
     }
     
     public void notifyAllObservers() {
-    	for (BuilderObserver observer : observers) {
-    		//Shape shape = observer.update();
+    	for (Observer observer : observers) {
     		observer.update();
-    		//shape.draw();
     	}
     }
 
